@@ -2,7 +2,6 @@ package br.com.blindspot.api.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,8 +19,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/veiculos")
 public class VeiculoController {
 
-    @Autowired
-    private VersaoService versaoService;
+    private final VersaoService versaoService;
+
+    public VeiculoController(VersaoService versaoService) {
+        this.versaoService = versaoService;
+    }
 
     @GetMapping("/busca")
     public ResponseEntity<List<VersaoResumoDTO>> buscar(

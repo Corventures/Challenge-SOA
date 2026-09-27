@@ -1,6 +1,5 @@
 package br.com.blindspot.api.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,17 +17,21 @@ import br.com.blindspot.api.security.TokenService;
 @Service
 public class AuthService {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
-    @Autowired
-    private AppUserRepository appUserRepository;
+    private final AppUserRepository appUserRepository;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthService(AuthenticationManager authenticationManager, TokenService tokenService,
+            AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+        this.appUserRepository = appUserRepository;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public TokenResponseDTO login(LoginDTO data) {
         var usernamePassword = new UsernamePasswordAuthenticationToken(data.username(), data.password());

@@ -2,7 +2,6 @@ package br.com.blindspot.api.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -21,11 +20,14 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/marcas")
 public class MarcaController {
 
-    @Autowired
-    private MarcaService marcaService;
+    private final MarcaService marcaService;
 
-    @Autowired
-    private ModeloService modeloService;
+    private final ModeloService modeloService;
+
+    public MarcaController(MarcaService marcaService, ModeloService modeloService) {
+        this.marcaService = marcaService;
+        this.modeloService = modeloService;
+    }
 
     @GetMapping
     public ResponseEntity<List<MarcaResponseDTO>> obterTodasMarcas(

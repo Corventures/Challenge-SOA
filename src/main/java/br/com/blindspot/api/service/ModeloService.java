@@ -3,7 +3,6 @@ package br.com.blindspot.api.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.blindspot.api.domain.Modelo;
@@ -13,8 +12,11 @@ import br.com.blindspot.api.repository.ModeloRepository;
 @Service
 public class ModeloService {
 
-    @Autowired
-    private ModeloRepository modeloRepository;
+    private final ModeloRepository modeloRepository;
+
+    ModeloService(ModeloRepository modeloRepository) {
+        this.modeloRepository = modeloRepository;
+    }
 
     public List<ModeloResponseDTO> obterModelosPorMarca(Long marcaId) {
         return modeloRepository.findByMarcaId(marcaId)

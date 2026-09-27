@@ -1,7 +1,6 @@
 package br.com.blindspot.api.controller;
 
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,8 +24,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
+
+    public AuthController(AuthService authService) {
+        this.authService = authService;
+    }
 
     @Operation(summary = "Realiza o login do usuário", description = "Autentica o usuário com base no username e senha fornecidos e retorna um token JWT válido para acesso aos recursos protegidos da API.")
     @ApiResponses(value = {

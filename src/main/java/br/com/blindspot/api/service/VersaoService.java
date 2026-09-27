@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.blindspot.api.domain.EspecDesempenho;
@@ -32,23 +31,26 @@ import br.com.blindspot.api.repository.VersaoRepository;
 @Service
 public class VersaoService {
 
-    @Autowired
-    private VersaoRepository versaoRepository;
+    private final VersaoRepository versaoRepository;
 
-    @Autowired
-    private FotoVeiculoRepository fotoVeiculoRepository;
+    private final FotoVeiculoRepository fotoVeiculoRepository;
 
-    @Autowired
-    private EspecMotorRepository especMotorRepository;
+    private final EspecMotorRepository especMotorRepository;
 
-    @Autowired
-    private EspecTransmissaoRepository especTransmissaoRepository;
+    private final EspecTransmissaoRepository especTransmissaoRepository;
 
-    @Autowired
-    private EspecDesempenhoRepository especDesempenhoRepository;
+    private final EspecDesempenhoRepository especDesempenhoRepository;
 
-    @Autowired
-    private EspecDimensaoRepository especDimensaoRepository;
+    private final EspecDimensaoRepository especDimensaoRepository;
+
+    VersaoService(EspecDimensaoRepository especDimensaoRepository, EspecDesempenhoRepository especDesempenhoRepository, EspecTransmissaoRepository especTransmissaoRepository, EspecMotorRepository especMotorRepository, FotoVeiculoRepository fotoVeiculoRepository, VersaoRepository versaoRepository) {
+        this.especDimensaoRepository = especDimensaoRepository;
+        this.especDesempenhoRepository = especDesempenhoRepository;
+        this.especTransmissaoRepository = especTransmissaoRepository;
+        this.especMotorRepository = especMotorRepository;
+        this.fotoVeiculoRepository = fotoVeiculoRepository;
+        this.versaoRepository = versaoRepository;
+    }
 
     public List<VersaoResumoDTO> buscarVersoes(Long marcaId, Long modeloId, Integer anoModelo, Long versaoId) {
         List<Versao> versoes;

@@ -1,6 +1,5 @@
 package br.com.blindspot.api.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,12 +24,15 @@ import br.com.blindspot.api.security.SecurityFilter;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    @Qualifier("handlerExceptionResolver")
-    private HandlerExceptionResolver exceptionResolver;
+    private final HandlerExceptionResolver exceptionResolver;
 
-    @Autowired
-    private SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
+
+    public SecurityConfig(@Qualifier("handlerExceptionResolver") HandlerExceptionResolver exceptionResolver,
+            SecurityFilter securityFilter) {
+        this.exceptionResolver = exceptionResolver;
+        this.securityFilter = securityFilter;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
