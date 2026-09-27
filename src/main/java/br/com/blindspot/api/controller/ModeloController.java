@@ -2,6 +2,7 @@ package br.com.blindspot.api.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,12 +25,14 @@ public class ModeloController {
         this.versaoService = versaoService;
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/anos")
     public ResponseEntity<List<Integer>> obterAnosModelo(@PathVariable Long modeloId) {
         List<Integer> anos = versaoService.obterAnosModelo(modeloId);
         return ResponseEntity.ok(anos);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/versoes")
     public ResponseEntity<List<VersaoResumoDTO>> obterVersoes(
             @PathVariable Long modeloId,

@@ -1,8 +1,11 @@
 package br.com.blindspot.api.controller;
 
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.blindspot.api.dto.request.CadastroDTO;
 import br.com.blindspot.api.dto.request.LoginDTO;
 import br.com.blindspot.api.dto.response.MensagemResponseDTO;
+import br.com.blindspot.api.dto.response.UserInfoResponseDTO;
 import br.com.blindspot.api.dto.response.TokenResponseDTO;
 import br.com.blindspot.api.service.AuthService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,5 +56,24 @@ public class AuthController {
     public ResponseEntity<MensagemResponseDTO> cadastro(@RequestBody @Valid CadastroDTO data) {
         var response = authService.cadastro(data);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
+    }
+
+    @Operation(summary = "Retorna o usuário autenticado", description = "Exibe o nome de usuário e as permissões do token atual.")
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/me")
+    public ResponseEntity<UserInfoResponseDTO> me(Authentication authentication) {
+        var authorities = authentication.getAuthorities()
+                .stream()
+                .map(authority -> authority.getAuthority())
+                .toList();
+
+        return ResponseEntity.ok(new UserInfoResponseDTO(authentication.getName(), authorities));
+    }
+
+    @Operation(summary = "Área restrita para administradores", description = "Endpoint de exemplo para diferenciar acesso de ADMIN e USER.")
+    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/admin")
+    public ResponseEntity<MensagemResponseDTO> admin() {
+        return ResponseEntity.ok(new MensagemResponseDTO("Acesso liberado para administrador"));
     }
 }

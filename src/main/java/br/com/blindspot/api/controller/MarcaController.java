@@ -2,6 +2,7 @@ package br.com.blindspot.api.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,6 +30,7 @@ public class MarcaController {
         this.modeloService = modeloService;
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping
     public ResponseEntity<List<MarcaResponseDTO>> obterTodasMarcas(
             @RequestParam(required = false) Boolean populares) {
@@ -43,6 +45,7 @@ public class MarcaController {
         return ResponseEntity.ok(marcas);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{marcaId}/modelos")
     public ResponseEntity<List<ModeloResponseDTO>> obterModelosPorMarca(@PathVariable Long marcaId) {
         List<ModeloResponseDTO> modelos = modeloService.obterModelosPorMarca(marcaId);

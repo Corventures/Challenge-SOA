@@ -2,6 +2,7 @@ package br.com.blindspot.api.controller;
 
 import java.util.List;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ public class VeiculoController {
         this.versaoService = versaoService;
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/busca")
     public ResponseEntity<List<VersaoResumoDTO>> buscar(
             @RequestParam(required = false) Long marcaId,
@@ -35,12 +37,14 @@ public class VeiculoController {
         return ResponseEntity.ok(resultados);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{idVersao}")
     public ResponseEntity<VersaoDetalhesDTO> obterDetalhes(@PathVariable Long idVersao) {
         VersaoDetalhesDTO detalhes = versaoService.obterDetalhesVersao(idVersao);
         return ResponseEntity.ok(detalhes);
     }
 
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     @GetMapping("/{idVersao}/mais-comparados")
     public ResponseEntity<List<VersaoResumoDTO>> obterMaisComparados(@PathVariable Long idVersao) {
         List<VersaoResumoDTO> maisComparados = versaoService.obterMaisComparados(idVersao);
